@@ -312,7 +312,7 @@ func startInProcess(ctx *Context, clientCtx client.Context, appCreator types.App
 		//  GRPC-web binding
 		handler := servergrpc.BuildGRPCWeb(grpcSrv)
 
-		apiSrv.Router.PathPrefix("/").HandlerFunc(handler)
+		apiSrv.Router.PathPrefix("/grpc").HandlerFunc(handler)
 
 		// End GRPC-Web
 
