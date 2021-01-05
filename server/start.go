@@ -4,7 +4,6 @@ package server
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"runtime/pprof"
 	"time"
@@ -278,6 +277,24 @@ func startInProcess(ctx *Context, clientCtx client.Context, appCreator types.App
 		app.RegisterTendermintService(clientCtx)
 	}
 
+	var (
+		grpcSrv *grpc.Server
+		// grpcWebSrv *http.Server
+	)
+	if config.GRPC.Enable {
+		grpcSrv, err = servergrpc.StartGRPCServer(app, config.GRPC.Address)
+		if err != nil {
+			return err
+		}
+		// if config.GRPCWeb.Enable {
+		// grpcWebSrv, err = servergrpc.StartGRPCWeb(grpcSrv, config)
+		// if err != nil {
+		// 	ctx.Logger.Error("failed to start grpc-web http server: ", err)
+		// 	return err
+		// }
+		// }
+	}
+
 	var apiSrv *api.Server
 
 	if config.API.Enable {
@@ -291,6 +308,14 @@ func startInProcess(ctx *Context, clientCtx client.Context, appCreator types.App
 			WithChainID(genDoc.ChainID)
 
 		apiSrv = api.New(clientCtx, ctx.Logger.With("module", "api-server"))
+
+		//  GRPC-web binding
+		handler := servergrpc.BuildGRPCWeb(grpcSrv)
+
+		apiSrv.Router.PathPrefix("/").HandlerFunc(handler)
+
+		// End GRPC-Web
+
 		app.RegisterAPIRoutes(apiSrv, config.API)
 		errCh := make(chan error)
 
@@ -304,24 +329,6 @@ func startInProcess(ctx *Context, clientCtx client.Context, appCreator types.App
 		case err := <-errCh:
 			return err
 		case <-time.After(5 * time.Second): // assume server started successfully
-		}
-	}
-
-	var (
-		grpcSrv    *grpc.Server
-		grpcWebSrv *http.Server
-	)
-	if config.GRPC.Enable {
-		grpcSrv, err = servergrpc.StartGRPCServer(app, config.GRPC.Address)
-		if err != nil {
-			return err
-		}
-		if config.GRPCWeb.Enable {
-			grpcWebSrv, err = servergrpc.StartGRPCWeb(grpcSrv, config)
-			if err != nil {
-				ctx.Logger.Error("failed to start grpc-web http server: ", err)
-				return err
-			}
 		}
 	}
 
@@ -340,9 +347,9 @@ func startInProcess(ctx *Context, clientCtx client.Context, appCreator types.App
 
 		if grpcSrv != nil {
 			grpcSrv.Stop()
-			if grpcWebSrv != nil {
-				grpcWebSrv.Close()
-			}
+			// if grpcWebSrv != nil {
+			// 	grpcWebSrv.Close()
+			// }
 		}
 
 		ctx.Logger.Info("exiting...")

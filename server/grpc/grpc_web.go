@@ -23,3 +23,13 @@ func StartGRPCWeb(grpcSrv *grpc.Server, config config.Config) (*http.Server, err
 	}
 	return grpcWebSrv, nil
 }
+
+func BuildGRPCWeb(grpcSrv *grpc.Server) func(http.ResponseWriter, *http.Request) {
+
+	ops := grpcweb.WithAllowNonRootResource(true)
+	wrappedServer := grpcweb.WrapServer(grpcSrv, ops)
+
+	return func(resp http.ResponseWriter, req *http.Request) {
+		wrappedServer.ServeHTTP(resp, req)
+	}
+}
