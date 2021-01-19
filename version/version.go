@@ -12,6 +12,7 @@
 //  go build -X github.com/cosmos/cosmos-sdk/version.Name=gaia \
 //   -X github.com/cosmos/cosmos-sdk/version.AppName=gaiad \
 //   -X github.com/cosmos/cosmos-sdk/version.Version=1.0 \
+//   -X github.com/cosmos/cosmos-sdk/version.AppVersion=10 \
 //   -X github.com/cosmos/cosmos-sdk/version.Commit=f0f7b7dab7e36c20b757cebce0e8f4fc5b95de60 \
 //   -X "github.com/cosmos/cosmos-sdk/version.BuildTags=linux darwin amd64"
 package version
@@ -30,6 +31,8 @@ var (
 	AppName = "<appd>"
 	// application's version string
 	Version = ""
+	//application's version number
+	AppVersion = "1"
 	// commit
 	Commit = ""
 	// build tags
@@ -38,33 +41,35 @@ var (
 
 // Info defines the application version information.
 type Info struct {
-	Name      string     `json:"name" yaml:"name"`
-	AppName   string     `json:"server_name" yaml:"server_name"`
-	Version   string     `json:"version" yaml:"version"`
-	GitCommit string     `json:"commit" yaml:"commit"`
-	BuildTags string     `json:"build_tags" yaml:"build_tags"`
-	GoVersion string     `json:"go" yaml:"go"`
-	BuildDeps []buildDep `json:"build_deps" yaml:"build_deps"`
+	Name       string     `json:"name" yaml:"name"`
+	AppName    string     `json:"server_name" yaml:"server_name"`
+	Version    string     `json:"version" yaml:"version"`
+	AppVersion string     `json:"app_version" yaml:"app_version"`
+	GitCommit  string     `json:"commit" yaml:"commit"`
+	BuildTags  string     `json:"build_tags" yaml:"build_tags"`
+	GoVersion  string     `json:"go" yaml:"go"`
+	BuildDeps  []buildDep `json:"build_deps" yaml:"build_deps"`
 }
 
 func NewInfo() Info {
 	return Info{
-		Name:      Name,
-		AppName:   AppName,
-		Version:   Version,
-		GitCommit: Commit,
-		BuildTags: BuildTags,
-		GoVersion: fmt.Sprintf("go version %s %s/%s", runtime.Version(), runtime.GOOS, runtime.GOARCH),
-		BuildDeps: depsFromBuildInfo(),
+		Name:       Name,
+		AppName:    AppName,
+		Version:    Version,
+		AppVersion: AppVersion,
+		GitCommit:  Commit,
+		BuildTags:  BuildTags,
+		GoVersion:  fmt.Sprintf("go version %s %s/%s", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+		BuildDeps:  depsFromBuildInfo(),
 	}
 }
 
 func (vi Info) String() string {
-	return fmt.Sprintf(`%s: %s
+	return fmt.Sprintf(`%s: %s %s
 git commit: %s
 build tags: %s
 %s`,
-		vi.Name, vi.Version, vi.GitCommit, vi.BuildTags, vi.GoVersion,
+		vi.Name, vi.Version, vi.AppVersion, vi.GitCommit, vi.BuildTags, vi.GoVersion,
 	)
 }
 

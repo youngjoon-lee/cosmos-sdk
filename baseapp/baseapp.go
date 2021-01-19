@@ -119,6 +119,9 @@ type BaseApp struct { // nolint: maligned
 	// application's version string
 	appVersion string
 
+	// application's version string
+	version uint64
+
 	// recovery handler for app.runTx method
 	runTxRecoveryMiddleware recoveryMiddleware
 
@@ -173,6 +176,11 @@ func (app *BaseApp) Name() string {
 // AppVersion returns the application's version string.
 func (app *BaseApp) AppVersion() string {
 	return app.appVersion
+}
+
+// Version returns the application's version string.
+func (app *BaseApp) Version() uint64 {
+	return app.version
 }
 
 // Logger returns the logger of the BaseApp.

@@ -3,6 +3,7 @@ package tmservice_test
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -58,6 +59,9 @@ func (s IntegrationTestSuite) TestQueryNodeInfo() {
 	s.Require().NoError(err)
 	var getInfoRes tmservice.GetNodeInfoResponse
 	s.Require().NoError(val.ClientCtx.JSONMarshaler.UnmarshalJSON(restRes, &getInfoRes))
+	v, err := strconv.ParseUint(version.AppVersion, 10, 64)
+	s.Require().NoError(err)
+	s.Require().Equal(getInfoRes.DefaultNodeInfo.ProtocolVersion.GetApp(), v)
 	s.Require().Equal(getInfoRes.ApplicationVersion.AppName, version.NewInfo().AppName)
 }
 

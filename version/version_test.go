@@ -16,7 +16,7 @@ import (
 
 func TestNewInfo(t *testing.T) {
 	info := version.NewInfo()
-	want := fmt.Sprintf(`: 
+	want := fmt.Sprintf(`:  0
 git commit: 
 build tags: 
 %s`, fmt.Sprintf("go version %s %s/%s", runtime.Version(), runtime.GOOS, runtime.GOARCH))
@@ -25,14 +25,15 @@ build tags:
 
 func TestInfo_String(t *testing.T) {
 	info := version.Info{
-		Name:      "testapp",
-		AppName:   "testappd",
-		Version:   "1.0.0",
-		GitCommit: "1b78457135a4104bc3af97f20654d49e2ea87454",
-		BuildTags: "netgo,ledger",
-		GoVersion: "go version go1.14 linux/amd64",
+		Name:       "testapp",
+		AppName:    "testappd",
+		Version:    "1.0.0",
+		AppVersion: "10",
+		GitCommit:  "1b78457135a4104bc3af97f20654d49e2ea87454",
+		BuildTags:  "netgo,ledger",
+		GoVersion:  "go version go1.14 linux/amd64",
 	}
-	want := `testapp: 1.0.0
+	want := `testapp: 1.0.0 10
 git commit: 1b78457135a4104bc3af97f20654d49e2ea87454
 build tags: netgo,ledger
 go version go1.14 linux/amd64`

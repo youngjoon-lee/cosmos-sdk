@@ -3,6 +3,7 @@ package baseapp
 import (
 	"fmt"
 	"io"
+	"strconv"
 
 	dbm "github.com/tendermint/tm-db"
 
@@ -102,6 +103,18 @@ func (app *BaseApp) SetAppVersion(v string) {
 	}
 
 	app.appVersion = v
+}
+
+// SetVersion sets the application's version string.
+func (app *BaseApp) SetVersion(v string) {
+	if app.sealed {
+		panic("SetVersion() on sealed BaseApp")
+	}
+	v1, err := strconv.ParseUint(v,10, 64)
+	if err != nil {
+		panic(err)
+	}
+	app.version = v1
 }
 
 func (app *BaseApp) SetDB(db dbm.DB) {
