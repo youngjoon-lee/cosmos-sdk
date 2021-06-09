@@ -50,4 +50,4 @@ echo "Taking down simdnode3..."
 echo
 docker-compose rm -sv simdnode3
 
-echo "Now check the docker logs: `docker-compose logs -f`. Watch some video on youtube and come back after ~5min, there'll be a consensus error."
+echo "Now check the docker logs: `docker-compose logs -f`. Watch some video on youtube and come back after 10min, there'll be a consensus error at block ~100."
