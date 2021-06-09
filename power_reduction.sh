@@ -40,9 +40,9 @@ $BUILD_CMD tx gov vote 1 yes --from node2 --home build/node2/simd --chain-id $CH
 $BUILD_CMD tx gov vote 1 yes --from node3 --home build/node3/simd --chain-id $CHAIN_ID --keyring-backend test --yes --fees="10stake"
 
 echo
-echo "Wait voting_period == 1min..."
+echo "Wait voting_period == 30s..."
 echo "In another terminal, you can check the proposal status: $BUILD_CMD q gov proposals"
-sleep 75
+sleep 35
 echo "Make sure the power reduction has been bumped from 1M (default) to 10M (new)!"
 echo
 $BUILD_CMD q staking params
@@ -50,6 +50,6 @@ $BUILD_CMD q staking params
 echo
 echo "Taking down simdnode3..."
 echo
-docker-compose rm -sv simdnode3 --force
+docker-compose rm -sv simdnode3
 
 echo "Now check the docker logs: `docker-compose logs -f`. Watch some video on youtube and come back after 10min, there'll be a consensus error at block ~100."
