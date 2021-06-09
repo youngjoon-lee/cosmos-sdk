@@ -51,6 +51,6 @@ $BUILD_CMD q staking params
 echo
 echo "Taking down simdnode3..."
 echo
-docker-compose rm -sv simdnode3
+docker-compose rm -fsv simdnode3
 
 echo "Now check the docker logs: `docker-compose logs -f`. Watch some video on youtube and come back after 10min, there'll be a consensus error at block ~100."
