@@ -29,6 +29,8 @@ echo "Submitting a proposal from node0..."
 echo
 $BUILD_CMD tx gov submit-proposal param-change proposal.json --from node0 --home build/node0/simd --keyring-backend test --chain-id $CHAIN_ID --fees="10stake" --yes
 
+sleep 6
+
 echo
 echo "Voting phase..."
 echo
