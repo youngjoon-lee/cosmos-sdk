@@ -43,6 +43,7 @@ echo
 echo "Wait voting_period == 30s..."
 echo "In another terminal, you can check the proposal status: $BUILD_CMD q gov proposals"
 sleep 35
+echo
 echo "Make sure the power reduction has been bumped from 1M (default) to 10M (new)!"
 echo
 $BUILD_CMD q staking params
