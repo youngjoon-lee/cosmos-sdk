@@ -93,6 +93,9 @@ func (s *DepositTestSuite) TestQueryDepositsInitialDeposit() {
 	s.Require().NoError(err)
 	acc := sdk.AccAddress(info.GetPubKey().Address())
 
+	_, err = s.network.WaitForHeight(1)
+	s.Require().NoError(err)
+
 	sendAmount := sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(200))
 	_, err = testutil.MsgSendExec(val.ClientCtx, val.Address, acc, sendAmount, commonArgs...)
 	s.Require().NoError(err)
