@@ -27,13 +27,8 @@ func ModuleAccountInvariant(keeper Keeper, bk types.BankKeeper) sdk.Invariant {
 	return func(ctx sdk.Context) (string, bool) {
 		var expectedDeposits sdk.Coins
 
-		keeper.IterateProposals(ctx, func(proposal types.Proposal) bool {
-			if proposal.Status != types.StatusRejected {
-				keeper.IterateDeposits(ctx, proposal.ProposalId, func(deposit types.Deposit) bool {
-					expectedDeposits = expectedDeposits.Add(deposit.Amount...)
-					return false
-				})
-			}
+		keeper.IterateAllDeposits(ctx, func(deposit types.Deposit) bool {
+			expectedDeposits = expectedDeposits.Add(deposit.Amount...)
 			return false
 		})
 
